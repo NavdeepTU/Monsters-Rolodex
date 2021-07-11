@@ -9,6 +9,7 @@ class App extends Component {
     super();
     this.state = {
       monsters: [],
+      searchField: ''
     };
   }
 
@@ -21,11 +22,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <CardList name="Navdeep">
-          {this.state.monsters.map((monster) => (
-            <h1 key={monster.id}>{monster.name}</h1>
-          ))}
-        </CardList>
+      <input type='search' placeholder='Search monsters...' onChange={e => {
+        this.setState({ searchField: e.target.value}, () => console.log(this.state)) // setState is asynchronus function
+      }}/>
+        <CardList monsters = {this.state.monsters}/>
       </div>
     );
   }
