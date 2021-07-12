@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 import { CardList } from "./components/card-list/card-list.component";
 
+import { SearchBox } from "./components/search-box/search-box.component";
+
 import "./App.css";
 
 class App extends Component {
@@ -9,8 +11,10 @@ class App extends Component {
     super();
     this.state = {
       monsters: [],
-      searchField: ''
+      searchField: "",
     };
+
+    // this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -19,13 +23,23 @@ class App extends Component {
       .then((users) => this.setState({ monsters: users }));
   }
 
+  // using arrow function to set the context to the App component inside it
+  handleChange = (e) => {
+    this.setState({ searchField: e.target.value });
+  }
+
   render() {
+    const { monsters, searchField } = this.state;
+    const filteredMonsters = monsters.filter((monster) =>
+      monster.name.toLowerCase().includes(searchField.toLowerCase())
+    );
     return (
       <div className="App">
-      <input type='search' placeholder='Search monsters...' onChange={e => {
-        this.setState({ searchField: e.target.value}, () => console.log(this.state)) // setState is asynchronus function
-      }}/>
-        <CardList monsters = {this.state.monsters}/>
+        <SearchBox
+          placeholder="Search monsters..."
+          handleChange={this.handleChange}
+        />
+        <CardList monsters={filteredMonsters} />
       </div>
     );
   }
